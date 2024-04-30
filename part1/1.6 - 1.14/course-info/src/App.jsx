@@ -4,7 +4,7 @@ const Text = ({ text }) => <h2>{text}</h2>
 
 const Button = ({ handleClick, text }) => <button onClick={handleClick}>{text}</button>
 
-const Statistic = ({ text, value }) => <p>{text}: {value}</p>
+const Statistics = ({ text, value }) => <p>{text}: {value}</p>
 
 const App = () => {
   const [good, setGood] = useState(0)
@@ -40,12 +40,12 @@ const App = () => {
       <Button handleClick={handleNeutralClick} text={'neutral'} />
       <Button handleClick={handleBadClick} text={'bad'} />
       <Text text={'Statistics'}/>
-      <Statistic text={'Good'} value={good}/>
-      <Statistic text={'Neutral'} value={neutral}/>
-      <Statistic text={'Bad'} value={bad}/>
-      <Statistic text={'All'} value={total}/>
-      <Statistic text={'Average'} value={averageResult}/>
-      <Statistic text={'Positive'} value={goodPercentage}/>
+      <Statistics text={'Good'} value={good}/>
+      <Statistics text={'Neutral'} value={neutral}/>
+      <Statistics text={'Bad'} value={bad}/>
+      <Statistics text={'All'} value={total}/>
+      <Statistics text={'Average'} value={averageResult}/>
+      <Statistics text={'Positive'} value={goodPercentage}/>
     </div>
   )
 }
