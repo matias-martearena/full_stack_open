@@ -1,8 +1,11 @@
 import { useState } from 'react'
 
+const Text = ({ text }) => <h2>{text}</h2>
+
 const Anecdote = ({ anecdote, votes, onVote, onRandomAnecdote }) => {
   return (
     <div>
+      <Text text={'Anecdote of the day'}/>
       <p><strong>{anecdote}</strong></p>
       <p>This anecdote has {votes} votes</p>
       <button onClick={onVote}>Vote</button>
@@ -11,7 +14,24 @@ const Anecdote = ({ anecdote, votes, onVote, onRandomAnecdote }) => {
   )
 }
 
-const Text = ({ text }) => <h2>{text}</h2>
+const AnecdoteWithMostVotes = ({ anecdote, votes }) => {
+  if (votes) {
+    return (
+      <div>
+        <Text text={'Anecdote with most votes'}/>
+        <p><strong>{anecdote}</strong></p>
+        <p>Has {votes} votes</p>
+      </div>
+    )
+  }
+
+  return (
+    <div>
+      <Text text={'Anecdote with most votes'}/>
+      <p>Please vote</p>
+    </div>
+  )
+}
 
 const Button = ({ handleClick, text }) => <button onClick={handleClick}>{text}</button>
 
@@ -29,18 +49,26 @@ const StatisticLine = ({ text, value }) => {
 const Statistics = ({ good, neutral, bad, total, average, goodPercentage }) => {
   if (total > 0) {
     return (
-      <table>
-        <StatisticLine text="Good" value={good} />
-        <StatisticLine text="Neutral" value={neutral} />
-        <StatisticLine text="Bad" value={bad} />
-        <StatisticLine text="All" value={total} />
-        <StatisticLine text="Average" value={average} />
-        <StatisticLine text="Good (%)" value={goodPercentage} />
-     </table>
+      <div>
+        <Text text={'Statistics'}/>
+        <table>
+          <StatisticLine text="Good" value={good} />
+          <StatisticLine text="Neutral" value={neutral} />
+          <StatisticLine text="Bad" value={bad} />
+          <StatisticLine text="All" value={total} />
+          <StatisticLine text="Average" value={average} />
+          <StatisticLine text="Good (%)" value={goodPercentage} />
+        </table>
+      </div>
     )
   }
 
-  return <p>No feedback given</p>
+  return (
+    <div>
+      <Text text={'Statistics'}/>
+      <p>No feedback given</p>
+    </div>
+  )
 }
 
 const App = () => {
@@ -87,6 +115,7 @@ const App = () => {
   const total = good + neutral + bad
   const averageResult = total > 0 ? (average / total) : 0
   const goodPercentage = total > 0 ? ((good / total) * 100) : 0
+  const mostVotedAnecdoteIndex = votes.indexOf(Math.max(...votes))
 
   return (
     <div>
@@ -96,11 +125,11 @@ const App = () => {
         onVote={handleVote}
         onRandomAnecdote={getRandomAnecdote}
       />
+      <AnecdoteWithMostVotes anecdote={anecdotes[mostVotedAnecdoteIndex]} votes={votes[mostVotedAnecdoteIndex]} />
       <Text text={'Give feedback'} />
       <Button handleClick={handleGoodClick} text={'good'} />
       <Button handleClick={handleNeutralClick} text={'neutral'} />
       <Button handleClick={handleBadClick} text={'bad'} />
-      <Text text={'Statistics'}/>
       <Statistics
         good={good}
         neutral={neutral}
