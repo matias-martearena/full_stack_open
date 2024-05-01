@@ -1,9 +1,11 @@
 import { useState } from 'react'
 
-const Anecdote = ({ onRandomAnecdote, anecdote }) => {
+const Anecdote = ({ anecdote, votes, onVote, onRandomAnecdote }) => {
   return (
     <div>
-      <p>{anecdote}</p>
+      <p><strong>{anecdote}</strong></p>
+      <p>This anecdote has {votes} votes</p>
+      <button onClick={onVote}>Vote</button>
       <button onClick={onRandomAnecdote}>Next anecdote</button>
     </div>
   )
@@ -42,13 +44,6 @@ const Statistics = ({ good, neutral, bad, total, average, goodPercentage }) => {
 }
 
 const App = () => {
-  const [good, setGood] = useState(0)
-  const [neutral, setNeutral] = useState(0)
-  const [bad, setBad] = useState(0)
-  const [total, setTotal] = useState(0)
-  const [average, setAverage] = useState(0)
-  const [selected, setSelected] = useState(0)
-
   const anecdotes = [
     'If it hurts, do it more often.',
     'Adding manpower to a late software project makes it later!',
@@ -59,6 +54,18 @@ const App = () => {
     'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients.',
     'The only way to go fast, is to go well.'
   ]
+  const [good, setGood] = useState(0)
+  const [neutral, setNeutral] = useState(0)
+  const [bad, setBad] = useState(0)
+  const [average, setAverage] = useState(0)
+  const [selected, setSelected] = useState(0)
+  const [votes, setVotes] = useState(new Array(anecdotes.length).fill(0))
+
+  const handleVote = () => {
+    const copy = [...votes]
+    copy[selected] += 1
+    setVotes(copy)
+  }
 
   const getRandomAnecdote = () => {
     const randomNumber = Math.floor(Math.random() * anecdotes.length)
@@ -67,33 +74,41 @@ const App = () => {
 
   const handleGoodClick = () => {
     setGood(good + 1)
-    setTotal(total + 1)
     setAverage(average + 1)
   }
 
-  const handleNeutralClick = () => {
-    setNeutral(neutral + 1)
-    setTotal(total + 1)
-  }
+  const handleNeutralClick = () => setNeutral(neutral + 1)
 
   const handleBadClick = () => {
     setBad(bad + 1)
-    setTotal(total + 1)
     setAverage(average - 1)
   }
 
+  const total = good + neutral + bad
   const averageResult = total > 0 ? (average / total) : 0
   const goodPercentage = total > 0 ? ((good / total) * 100) : 0
 
   return (
     <div>
-      <Anecdote anecdote={anecdotes[selected]} onRandomAnecdote={getRandomAnecdote}/>
+      <Anecdote
+        anecdote={anecdotes[selected]}
+        votes={votes[selected]}
+        onVote={handleVote}
+        onRandomAnecdote={getRandomAnecdote}
+      />
       <Text text={'Give feedback'} />
       <Button handleClick={handleGoodClick} text={'good'} />
       <Button handleClick={handleNeutralClick} text={'neutral'} />
       <Button handleClick={handleBadClick} text={'bad'} />
       <Text text={'Statistics'}/>
-      <Statistics good={good} neutral={neutral} bad={bad} total={total} average={averageResult} goodPercentage={goodPercentage} />
+      <Statistics
+        good={good}
+        neutral={neutral}
+        bad={bad}
+        total={total}
+        average={averageResult}
+        goodPercentage={goodPercentage}
+      />
     </div>
   )
 }
