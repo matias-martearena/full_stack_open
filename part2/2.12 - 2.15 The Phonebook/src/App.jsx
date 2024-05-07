@@ -16,23 +16,38 @@ const App = () => {
       .then(persons => setPersons(persons))
   }, [])
 
-  const addPerson = e => {
+  const addPerson = async e => {
     e.preventDefault()
 
-    if (persons.find(person => person.name === newName)) return alert(`${newName} is already added to phonebook`)
+    if (persons.find(person => person.name === newName)) {
+      alert(`${newName} is already added to phonebook`)
+      return
+    }
 
     const personObject = {
       name: newName,
       number: newNumber
     }
 
-    personService
-      .create(personObject)
-      .then(returnedPerson => {
-        setPersons([...persons, returnedPerson])
-        setNewName('')
-        setNewNumber('')
-      })
+    try {
+      const returnedPerson = await personService.create(personObject)
+      setPersons([...persons, returnedPerson])
+      setNewName('')
+      setNewNumber('')
+    } catch (error) {
+      console.log('Error adding person:', error)
+    }
+  }
+
+  const deletePerson = async id => {
+    try {
+      if (window.confirm(`Are you sure you want to delete person with ID ${id}?`)) {
+        await personService.deletePerson(id)
+        setPersons(persons.filter(person => person.id !== id))
+      }
+    } catch (error) {
+      console.log('Error deleted person:', error)
+    }
   }
 
   const handleFindName = e => setFindName(e.target.value)
@@ -54,7 +69,10 @@ const App = () => {
         number={newNumber}
         onChangeNumber={handleNumberChange}
       />
-      <Person filter={filteredPersons}/>
+      <Person
+        filter={filteredPersons}
+        deletePerson={deletePerson}
+      />
     </div>
   )
 }
