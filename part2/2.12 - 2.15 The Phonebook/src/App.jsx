@@ -16,17 +16,34 @@ const App = () => {
       .then(persons => setPersons(persons))
   }, [])
 
+  const updatePerson = async id => {
+    try {
+      const person = persons.find(p => p.id === id)
+      const changedPerson = { ...person, number: newNumber }
+      const updatedPerson = await personService.update(id, changedPerson)
+
+      setPersons(persons.map(p => (p.id === id ? updatedPerson : p)))
+    } catch (error) {
+      console.log('Error updating person:', error)
+    }
+  }
+
   const addPerson = async e => {
     e.preventDefault()
-
-    if (persons.find(person => person.name === newName)) {
-      alert(`${newName} is already added to phonebook`)
-      return
-    }
 
     const personObject = {
       name: newName,
       number: newNumber
+    }
+
+    const existingPerson = persons.find(person => person.name === newName)
+    if (existingPerson) {
+      if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
+        updatePerson(existingPerson.id, newNumber)
+        setNewName('')
+        setNewNumber('')
+        return
+      }
     }
 
     try {
@@ -41,7 +58,8 @@ const App = () => {
 
   const deletePerson = async id => {
     try {
-      if (window.confirm(`Are you sure you want to delete person with ID ${id}?`)) {
+      const personToDelete = persons.find(p => p.id === id)
+      if (window.confirm(`Delete ${personToDelete.name}?`)) {
         await personService.deletePerson(id)
         setPersons(persons.filter(person => person.id !== id))
       }
