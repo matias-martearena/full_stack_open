@@ -3,7 +3,8 @@ import personService from './services/persons'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Person from './components/Person'
-import OperationCompleted from './components/OperationCompleted'
+import Success from './components/CompletedMessage'
+import Error from './components/ErrorMessage'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -11,6 +12,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [findName, setFindName] = useState('')
   const [successMessage, setSuccessMessage] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
     personService
@@ -26,7 +28,11 @@ const App = () => {
 
       setPersons(persons.map(p => (p.id === id ? updatedPerson : p)))
     } catch (error) {
-      console.log('Error updating person:', error)
+      setErrorMessage('The number was not updated successfully')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+      console.error('Error updating person:', error)
     }
   }
 
@@ -44,10 +50,12 @@ const App = () => {
         updatePerson(existingPerson.id, newNumber)
         setNewName('')
         setNewNumber('')
-        setSuccessMessage(`The number of ${existingPerson.name} was updated successfully`)
-        setTimeout(() => {
-          setSuccessMessage(null)
-        }, 5000)
+        if (errorMessage === null) {
+          setSuccessMessage(`The number of ${existingPerson.name} was updated successfully`)
+          setTimeout(() => {
+            setSuccessMessage(null)
+          }, 5000)
+        }
         return
       }
     }
@@ -57,12 +65,18 @@ const App = () => {
       setPersons([...persons, returnedPerson])
       setNewName('')
       setNewNumber('')
-      setSuccessMessage(`The number of ${personObject.name} was created successfully`)
-      setTimeout(() => {
-        setSuccessMessage(null)
-      }, 5000)
+      if (errorMessage === null) {
+        setSuccessMessage(`The number of ${personObject.name} was created successfully`)
+        setTimeout(() => {
+          setSuccessMessage(null)
+        }, 5000)
+      }
     } catch (error) {
-      console.log('Error adding person:', error)
+      setErrorMessage('The number was not created successfully')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+      console.error('Error adding person:', error)
     }
   }
 
@@ -72,9 +86,19 @@ const App = () => {
       if (window.confirm(`Delete ${personToDelete.name}?`)) {
         await personService.deletePerson(id)
         setPersons(persons.filter(person => person.id !== id))
+        if (errorMessage === null) {
+          setSuccessMessage(`The number of ${personToDelete.name} was deleted successfully`)
+          setTimeout(() => {
+            setSuccessMessage(null)
+          }, 5000)
+        }
       }
     } catch (error) {
-      console.log('Error deleted person:', error)
+      setErrorMessage('The number already was deleted')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+      console.error('Error deleted person:', error)
     }
   }
 
@@ -89,7 +113,8 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <OperationCompleted message={successMessage} />
+      <Success message={successMessage} />
+      <Error message={errorMessage} />
       <Filter name={findName} onFindName={handleFindName} />
       <PersonForm
         onSubmitForm={addPerson}
