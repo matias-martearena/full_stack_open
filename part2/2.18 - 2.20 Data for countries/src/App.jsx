@@ -6,6 +6,7 @@ import CountriesList from './components/CountriesList'
 function App () {
   const [countries, setCountries] = useState(null)
   const [findName, setFindName] = useState('')
+  const [selectedCountry, setSelectedCountry] = useState(null)
 
   useEffect(() => {
     CountriesServices
@@ -17,6 +18,8 @@ function App () {
   if (!countries) return null
 
   const handleFindName = e => setFindName(e.target.value)
+  const selectCountry = country => setSelectedCountry(country)
+
   const filteredCountries = countries.filter(countrie =>
     countrie.name.official.toLowerCase().includes(findName.toLowerCase())
   )
@@ -25,7 +28,12 @@ function App () {
     <section>
       <h1>Countries</h1>
       <Filter name={findName} onFindName={handleFindName}/>
-      <CountriesList name={findName} countriesFilter={filteredCountries}/>
+      <CountriesList
+        name={findName}
+        countriesFilter={filteredCountries}
+        selectedCountry={selectedCountry}
+        selectCountry={selectCountry}
+      />
     </section>
   )
 }
