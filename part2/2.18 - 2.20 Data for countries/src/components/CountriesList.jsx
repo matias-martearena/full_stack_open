@@ -38,7 +38,7 @@ const CountryDetail = ({ country, onToggleDetail }) => (
   a 'selectCountry(country)' para seleccionar el pais y mostrar sus detalles.
 */
 
-const CountriesList = ({ name, countriesFilter, selectedCountry, selectCountry }) => {
+const CountriesList = ({ name, countriesFilter, selectedCountry, selectCountry, weather }) => {
   if (!countriesFilter) return null
 
   if (name.length === 0) return <p>Please enter a filter</p>
@@ -50,7 +50,7 @@ const CountriesList = ({ name, countriesFilter, selectedCountry, selectCountry }
       <div>
         {countriesFilter.map(country => (
           <div key={country.name.official}>
-            <h2>{country.name.official}</h2>
+            <h2>{country.name.official}, {country.cca2}</h2>
             <p><strong>Common name: </strong>{country.name.common}</p>
             <p>Capital: {country.capital[0]}</p>
             <p>Area: {country.area}</p>
@@ -61,6 +61,20 @@ const CountriesList = ({ name, countriesFilter, selectedCountry, selectCountry }
               ))}
             </ul>
             <img src={country.flags.png} alt={`Flag of ${country.name.official}`} />
+            <h2>Weather in {country.capital[0]}</h2>
+            {weather !== null
+              ? (
+              <div>
+                <p>Temperature: {(weather.main.temp - 273.15).toFixed(2)} °C</p>
+                <img src={`https://openweathermap.org/img/wn/${weather.weather.icon}@2x.png`} alt="Weather icon" />
+                <p>Feels like: {(weather.main.feels_like - 273.15).toFixed(2)} °C</p>
+                <p>Max: {(weather.main.temp_max - 273.15).toFixed(2)} °C Min: {(weather.main.temp_min - 273.15).toFixed()} °C</p>
+                <p>Humidity: {weather.main.humidity}</p>
+                <p>Wind speed: {weather.wind.speed}</p>
+              </div>
+                )
+              : (<p>Waiting for weather</p>)
+            }
           </div>
         ))}
       </div>
