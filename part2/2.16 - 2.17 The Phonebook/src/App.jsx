@@ -18,6 +18,7 @@ const App = () => {
     personService
       .getAll()
       .then(persons => setPersons(persons))
+      .catch(error => console.log(error))
   }, [])
 
   const updatePerson = async id => {
