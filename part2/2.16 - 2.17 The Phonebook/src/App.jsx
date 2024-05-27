@@ -77,7 +77,7 @@ const App = () => {
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000)
-      console.error('Error adding person:', error)
+      console.error('Error adding person:', error.response.data.error)
     }
   }
 
