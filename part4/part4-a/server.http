@@ -1,0 +1,13 @@
+### GET: Return all blogs
+GET http://localhost:3001/api/blogs
+
+### POST: Create a blog
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+
+{
+  "title": "Test blog",
+  "author": "Matias Martearena",
+  "url": "www.testblog.com.ar",
+  "likes": 10
+}

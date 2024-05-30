@@ -1,0 +1,35 @@
+{
+  "name": "part4-a",
+  "version": "1.0.0",
+  "description": "Blog app",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/matias-martearena/full_stack_open.git"
+  },
+  "author": "Matias Martearena",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/matias-martearena/full_stack_open/issues"
+  },
+  "homepage": "https://github.com/matias-martearena/full_stack_open#readme",
+  "dependencies": {
+    "cors": "2.8.5",
+    "dotenv": "16.4.5",
+    "express": "4.19.2",
+    "mongodb": "6.7.0",
+    "mongoose": "8.4.0"
+  },
+  "devDependencies": {
+    "standard": "^17.1.0"
+  },
+  "eslintConfig": {
+    "extends": "standard"
+  }
+}
