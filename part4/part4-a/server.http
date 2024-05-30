@@ -1,3 +1,6 @@
+### GET: Home page
+GET http://localhost:3001
+
 ### GET: Return all blogs
 GET http://localhost:3001/api/blogs
 
