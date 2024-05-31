@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 export const dummy = array => {
   return 1
 }
@@ -25,4 +27,23 @@ export const favoriteBlog = blogs => {
   }
 
   return favoriteBlog
+}
+
+export const mostBlogs = blogs => {
+  if (!Array.isArray(blogs)) throw new Error('Input must be an array of blog objects')
+  if (blogs.length === 0) return 0
+
+  // Count blogs by author using Lodash's 'countBy' function
+  const authorBlogCounts = _.countBy(blogs, 'author')
+
+  // Convert authorBlogCounts to an array of objects
+  const authorBlogData = Object.entries(authorBlogCounts).map(([author, count]) => ({
+    author,
+    blogs: count
+  }))
+
+  // Find the author with the most blogs using Lodash's maxBy function
+  const mostProlificAuthor = _.maxBy(authorBlogData, 'blogs')
+
+  return mostProlificAuthor
 }
