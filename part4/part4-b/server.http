@@ -14,3 +14,12 @@ Content-Type: application/json
   "url": "www.testblog.com.ar",
   "likes": 10
 }
+
+### POST: Create a blog without title and url
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+
+{
+  "author": "Matias Martearena",
+  "likes": 10
+}

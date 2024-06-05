@@ -11,7 +11,7 @@ blogsRouter.get('/', async (request, response, next) => {
 blogsRouter.post('/', async (request, response, next) => {
   const { title, author, url, likes } = request.body
 
-  if (title === undefined) {
+  if (title === undefined || url === undefined) {
     return response.status(400).json({ error: 'content missing' })
   }
 

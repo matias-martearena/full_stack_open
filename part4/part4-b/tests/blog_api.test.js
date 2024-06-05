@@ -117,6 +117,40 @@ describe('Blog api test', () => {
     assert.strictEqual(haveLikes, true)
     assert.strictEqual(response.body.likes, 0)
   })
+
+  test('Title property is missing from the request data', async () => {
+    const newBlogWithoutTitle = {
+      author: 'Olivia Juarez',
+      url: 'www.testing3.com',
+      likes: 14
+    }
+
+    const missingTitle = newBlogWithoutTitle.title !== undefined
+    assert.strictEqual(missingTitle, false)
+
+    await api
+      .post('/api/blogs')
+      .send(newBlogWithoutTitle)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+  })
+
+  test('Url property is missing from the request data', async () => {
+    const newBlogWithoutUrl = {
+      title: 'Testing blog part3',
+      author: 'Olivia Juarez',
+      likes: 14
+    }
+
+    const missingUrl = newBlogWithoutUrl.url !== undefined
+    assert.strictEqual(missingUrl, false)
+
+    await api
+      .post('/api/blogs')
+      .send(newBlogWithoutUrl)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+  })
 })
 
 after(async () => {
