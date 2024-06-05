@@ -35,9 +35,37 @@ describe('Blog api test', () => {
 
   test('The blogs have id property', async () => {
     const blogs = await blogsInDb()
-    const allHaveId = blogs.every(obj => obj.id !== undefined)
+    const allHaveId = blogs.every(blog => blog.id !== undefined)
 
     assert.strictEqual(allHaveId, true)
+  })
+
+  test('The blogs have title property', async () => {
+    const blogs = await blogsInDb()
+    const allHaveTitle = blogs.every(blog => blog.title !== undefined)
+
+    assert.strictEqual(allHaveTitle, true)
+  })
+
+  test('The blogs have author property', async () => {
+    const blogs = await blogsInDb()
+    const allHaveAuthor = blogs.every(blog => blog.author !== undefined)
+
+    assert.strictEqual(allHaveAuthor, true)
+  })
+
+  test('The blogs have url property', async () => {
+    const blogs = await blogsInDb()
+    const allHaveUrl = blogs.every(blog => blog.url !== undefined)
+
+    assert.strictEqual(allHaveUrl, true)
+  })
+
+  test('The blogs have like property', async () => {
+    const blogs = await blogsInDb()
+    const allHaveLikes = blogs.every(blog => blog.likes !== undefined)
+
+    assert.strictEqual(allHaveLikes, true)
   })
 
   test('A valid blog can be added', async () => {
@@ -66,6 +94,28 @@ describe('Blog api test', () => {
     assert(blogsAuthor.includes('Agustin Castro'))
     assert(blogsUrl.includes('www.testing.com'))
     assert(blogsLikes.includes(30))
+  })
+
+  test('The likes property is not missing from the request', async () => {
+    const newBlog = {
+      title: 'Blog testing 2',
+      author: 'Ignacio Martearena',
+      url: 'www.testing2.com'
+    }
+
+    const newBlogWithoutLikes = newBlog.likes !== undefined
+    assert.strictEqual(newBlogWithoutLikes, false)
+
+    const response = await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    const haveLikes = response.body.likes !== undefined
+
+    assert.strictEqual(haveLikes, true)
+    assert.strictEqual(response.body.likes, 0)
   })
 })
 
