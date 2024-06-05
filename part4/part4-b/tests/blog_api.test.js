@@ -6,7 +6,7 @@ import mongoose from 'mongoose'
 
 import Blog from '../models/blog.js'
 import { app } from '../app.js'
-import { initialBlogs } from './test_helper.js'
+import { blogsInDb, initialBlogs } from './test_helper.js'
 
 const api = supertest(app)
 
@@ -31,6 +31,13 @@ describe('Blog api test', () => {
     const response = await api.get('/api/blogs')
 
     assert.strictEqual(response.body.length, initialBlogs.length)
+  })
+
+  test('The blogs have id property', async () => {
+    const blogs = await blogsInDb()
+    const allHaveId = blogs.every(obj => obj.id !== undefined)
+
+    assert.strictEqual(allHaveId, true)
   })
 })
 
