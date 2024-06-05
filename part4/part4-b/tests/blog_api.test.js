@@ -39,6 +39,34 @@ describe('Blog api test', () => {
 
     assert.strictEqual(allHaveId, true)
   })
+
+  test('A valid blog can be added', async () => {
+    const newBlog = {
+      title: 'Blog testing',
+      author: 'Agustin Castro',
+      url: 'www.testing.com',
+      likes: 30
+    }
+
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    const blogsAtEnd = await blogsInDb()
+    assert.strictEqual(blogsAtEnd.length, initialBlogs.length + 1)
+
+    const blogsTitle = blogsAtEnd.map(b => b.title)
+    const blogsAuthor = blogsAtEnd.map(b => b.author)
+    const blogsUrl = blogsAtEnd.map(b => b.url)
+    const blogsLikes = blogsAtEnd.map(b => b.likes)
+
+    assert(blogsTitle.includes('Blog testing'))
+    assert(blogsAuthor.includes('Agustin Castro'))
+    assert(blogsUrl.includes('www.testing.com'))
+    assert(blogsLikes.includes(30))
+  })
 })
 
 after(async () => {
