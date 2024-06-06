@@ -41,3 +41,30 @@ DELETE http://localhost:3001/api/blogs/6660fc801f96548785ea85b1
 
 ### Bad format to an id blog
 DELETE http://localhost:3001/api/blogs/6660fc801f96548785ea85
+
+### PUT: Update a blod
+PUT http://localhost:3001/api/blogs/6660fc7c1f96548785ea85b1
+Content-Type: application/json
+
+{
+  "author": "Agustin Castro",
+  "likes": 142
+}
+
+### PUT: Error on update function for not found blog
+PUT http://localhost:3001/api/blogs/6660fc7c1f96548785ea85b2
+Content-Type: application/json
+
+{
+  "author": "Agustin Castro",
+  "likes": 142
+}
+
+### PUT: Error on update function for not valid id type
+PUT http://localhost:3001/api/blogs/6660fc7c1f96548785e
+Content-Type: application/json
+
+{
+  "author": "Agustin Castro",
+  "likes": 142
+}

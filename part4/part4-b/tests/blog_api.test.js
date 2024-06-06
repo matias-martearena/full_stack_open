@@ -229,6 +229,53 @@ describe('Deletion of a blog', () => {
   })
 })
 
+describe('Updating of a blog', () => {
+  test('Update done', async () => {
+    const blogsAtStart = await blogsInDb()
+    const blogForUpdate = blogsAtStart[0]
+    const infoForBlog = {
+      author: 'Ignacio Martearena',
+      likes: 312
+    }
+
+    await api
+      .put(`/api/blogs/${blogForUpdate.id}`)
+      .send(infoForBlog)
+      .expect(200)
+
+    const blogsAtEnd = await blogsInDb()
+    const blogUpdated = blogsAtEnd[0]
+
+    assert.notDeepStrictEqual(blogForUpdate, blogUpdated)
+
+    const newAuthor = blogUpdated.author
+    const newLikes = blogUpdated.likes
+
+    assert.deepEqual(newAuthor, infoForBlog.author)
+    assert.deepEqual(newLikes, infoForBlog.likes)
+  })
+
+  test('The required fields are not sent', async () => {
+    const blogsAtStart = await blogsInDb()
+    const blogForUpdate = blogsAtStart[0]
+    const infoForBlog = {
+      title: '',
+      author: 'Ignacio Martearena',
+      likes: 312
+    }
+
+    await api
+      .put(`/api/blogs/${blogForUpdate.id}`)
+      .send(infoForBlog)
+      .expect(400)
+
+    const blogsAtEnd = await blogsInDb()
+    const blogNotUpdated = blogsAtEnd[0]
+
+    assert.deepStrictEqual(blogNotUpdated, blogForUpdate)
+  })
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
