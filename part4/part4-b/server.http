@@ -4,15 +4,24 @@ GET http://localhost:3001
 ### GET: Return all blogs
 GET http://localhost:3001/api/blogs
 
+### GET: Return a blogs for id
+GET http://localhost:3001/api/blogs/6658caa96242ac8140ceb2bc
+
+### GET: Return an error for id not found
+GET http://localhost:3001/api/blogs/6658caa96242ac8140ceb2bd
+
+### GET: Return an error for bad format id
+GET http://localhost:3001/api/blogs/6658caa96242ac8140ce
+
 ### POST: Create a blog
 POST http://localhost:3001/api/blogs
 Content-Type: application/json
 
 {
-  "title": "Test blog",
+  "title": "Test blog 4",
   "author": "Matias Martearena",
   "url": "www.testblog.com.ar",
-  "likes": 10
+  "likes": 13
 }
 
 ### POST: Create a blog without title and url
@@ -23,3 +32,12 @@ Content-Type: application/json
   "author": "Matias Martearena",
   "likes": 10
 }
+
+### Delete a blog
+DELETE http://localhost:3001/api/blogs/6660fc801f96548785ea85b3
+
+### Error the blog is not exist
+DELETE http://localhost:3001/api/blogs/6660fc801f96548785ea85b1
+
+### Bad format to an id blog
+DELETE http://localhost:3001/api/blogs/6660fc801f96548785ea85
