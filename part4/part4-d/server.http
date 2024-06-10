@@ -1,0 +1,107 @@
+### GET: Home page
+GET http://localhost:3001
+
+### ------------------ Blogs operators ------------------
+
+### Return all blogs
+GET http://localhost:3001/api/blogs
+
+### Return a blog for id
+GET http://localhost:3001/api/blogs/6658caa96242ac8140ceb2bc
+
+### POST: Create a blog
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+
+{
+  "title": "Test blog 4",
+  "author": "Matias Martearena",
+  "url": "www.testblog.com.ar",
+  "likes": 13
+}
+
+### Delete a blog
+DELETE http://localhost:3001/api/blogs/66678ba334d3658ce8b772f5
+
+### PUT: Update a blog
+PUT http://localhost:3001/api/blogs/6660fc7c1f96548785ea85b1
+Content-Type: application/json
+
+{
+  "author": "Agustin Castro",
+  "likes": 100
+}
+
+### ------------------ Blogs errors operators ------------------
+
+### Return an error for id not found
+GET http://localhost:3001/api/blogs/6658caa96242ac8140ceb2bd
+
+### Return an error for bad format id
+GET http://localhost:3001/api/blogs/6658caa96242ac8140ce
+
+### Error when create a blog without title and url
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+
+{
+  "author": "Matias Martearena",
+  "likes": 10
+}
+
+### Error the blog is not exist
+DELETE http://localhost:3001/api/blogs/6660fc801f96548785ea85b1
+
+### Bad format to an id blog
+DELETE http://localhost:3001/api/blogs/6660fc801f96548785ea85
+
+### Error on update function for not found blog
+PUT http://localhost:3001/api/blogs/6660fc7c1f96548785ea85b2
+Content-Type: application/json
+
+{
+  "author": "Agustin Castro",
+  "likes": 142
+}
+
+### Error on update function for not valid id type
+PUT http://localhost:3001/api/blogs/6660fc7c1f96548785e
+Content-Type: application/json
+
+{
+  "author": "Agustin Castro",
+  "likes": 142
+}
+
+### ------------------ Users operators ------------------
+
+### Return all users
+GET http://localhost:3001/api/users
+
+### Return an user for id
+GET http://localhost:3001/api/users/66678d37345264992860af77
+
+### Create a new user
+POST http://localhost:3001/api/users
+Content-Type: application/json
+
+{
+  "username": "WhiteRulo",
+  "name": "Matias Martearena",
+  "password": "secret-secret"
+}
+
+### ------------------ Error users operators ------------------
+
+### User not found
+GET http://localhost:3001/api/users/66678d37345264992860af73
+
+### Error when create an user
+POST http://localhost:3001/api/users
+Content-Type: application/json
+
+{
+  "username": "WhiteRulo",
+  "name": "Matias Martearena",
+  "password": "secret-secret"
+}
