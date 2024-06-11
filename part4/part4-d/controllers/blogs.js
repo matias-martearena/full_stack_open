@@ -37,7 +37,7 @@ blogsRouter.post('/', async (request, response, next) => {
 
   const user = await User.findById(_id)
 
-  if ((title || url) === undefined) {
+  if (title === undefined || url === undefined) {
     return response
       .status(400)
       .json({ error: 'Title and url are required' })

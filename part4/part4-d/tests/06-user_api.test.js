@@ -11,7 +11,7 @@ import User from '../models/user.js'
 
 const api = supertest(app)
 
-describe('When there is initially one user in db', () => {
+describe('USER: --- When there is initially one user in db', () => {
   beforeEach(async () => {
     await User.deleteMany({})
 

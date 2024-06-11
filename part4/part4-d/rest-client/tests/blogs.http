@@ -7,10 +7,10 @@ GET http://localhost:3001/api/blogs/:id
 ### POST: Create a blog
 POST http://localhost:3001/api/blogs
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFndUNhc3RybyIsImlkIjoiNjY2OGE0NmNlNzJlMjBlMTdiNWQxZmNkIiwiaWF0IjoxNzE4MTM0ODY2LCJleHAiOjE3MTgxMzg0NjZ9.GAbWISmjkPCVVYz8Y2S21XXQDmi94pmScLqC0DhJug4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFndUNhc3RybyIsImlkIjoiNjY2OGE0NmNlNzJlMjBlMTdiNWQxZmNkIiwiaWF0IjoxNzE4MTM5ODU1LCJleHAiOjE3MTgxNDM0NTV9.0zkI6DPkQgsUOzwYTNi0Dk_SnkhBhMy9s0lO3lBSKt
 
 {
-  "title": "Token test 2",
+  "title": "Token test 3",
   "author": "Agustin Castro",
   "url": "www.authorization.com",
   "likes": 1,

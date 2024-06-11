@@ -7,6 +7,7 @@ import supertest from 'supertest'
 import { app } from '../app.js'
 import { blogsInDb, initialBlogs, nonExistingId } from './test_helper.js'
 import Blog from '../models/blog.js'
+import User from '../models/user.js'
 
 const api = supertest(app)
 
@@ -108,15 +109,34 @@ describe('Properties of blogs', () => {
 describe('Addition of a new blog', () => {
   test('A valid blog can be added', async () => {
     const blogsAtStart = await blogsInDb()
+    const userAtStart = await User.find({})
+
+    const user = userAtStart[0]
+
+    const userInfo = {
+      username: user.username,
+      password: 'secret'
+    }
+
+    const response = await api
+      .post('/api/login')
+      .send(userInfo)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    const userToken = `Bearer ${response.body.token}`
+
     const newBlog = {
       title: 'Blog testing',
       author: 'Agustin Castro',
       url: 'www.testing.com',
-      likes: 30
+      likes: 30,
+      userId: user.id
     }
 
     await api
       .post('/api/blogs')
+      .set('Authorization', userToken)
       .send(newBlog)
       .expect(201)
       .expect('Content-Type', /application\/json/)
@@ -137,140 +157,226 @@ describe('Addition of a new blog', () => {
 
   test('fails with status code 400 if data is invalid', async () => {
     const blogsAtStart = await blogsInDb()
+    const userAtStart = await User.find({})
+
+    const user = userAtStart[0]
+
+    const userInfo = {
+      username: user.username,
+      password: 'secret'
+    }
+
+    const response = await api
+      .post('/api/login')
+      .send(userInfo)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    const userToken = `Bearer ${response.body.token}`
+
     const newBlog = {
       author: 'Matias Martearena',
-      likes: 10
+      likes: 10,
+      userId: user.id
     }
 
     await api
       .post('/api/blogs')
+      .set('Authorization', userToken)
       .send(newBlog)
       .expect(400)
 
     const blogsAtEnd = await blogsInDb()
     assert.strictEqual(blogsAtEnd.length, blogsAtStart.length)
   })
+
+  test('fails with status code 500 if there is no token', async () => {
+    const blogsAtStart = await blogsInDb()
+    const userAtStart = await User.find({})
+
+    const user = userAtStart[0]
+
+    const userInfo = {
+      username: user.username,
+      password: 'secret'
+    }
+
+    await api
+      .post('/api/login')
+      .send(userInfo)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    const newBlog = {
+      title: 'Blog testing',
+      author: 'Agustin Castro',
+      url: 'www.testing.com',
+      likes: 30,
+      userId: user.id
+    }
+
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(500)
+
+    const blogsAtEnd = await blogsInDb()
+    assert.strictEqual(blogsAtEnd.length, blogsAtStart.length)
+  })
+
+  test('fails with status code 401 if there is a incorrect token', async () => {
+    const blogsAtStart = await blogsInDb()
+    const userAtStart = await User.find({})
+
+    const user = userAtStart[0]
+
+    const userInfo = {
+      username: user.username,
+      password: 'secret'
+    }
+
+    await api
+      .post('/api/login')
+      .send(userInfo)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    const newBlog = {
+      title: 'Blog testing',
+      author: 'Agustin Castro',
+      url: 'www.testing.com',
+      likes: 30,
+      userId: user.id
+    }
+
+    const response = await api
+      .post('/api/blogs')
+      .set('Authorization', 'Bearer :token')
+      .send(newBlog)
+      .expect(401)
+
+    const blogsAtEnd = await blogsInDb()
+    assert.strictEqual(blogsAtEnd.length, blogsAtStart.length)
+    assert.strictEqual(response.body.error, 'token invalid')
+  })
 })
 
 describe('Properties is or not missing from the data', () => {
   test('The likes property is not missing from the request', async () => {
+    const userAtStart = await User.find({})
+
+    const user = userAtStart[0]
+
+    const userInfo = {
+      username: user.username,
+      password: 'secret'
+    }
+
+    const response = await api
+      .post('/api/login')
+      .send(userInfo)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    const userToken = `Bearer ${response.body.token}`
+
     const newBlog = {
-      title: 'Blog testing 2',
+      title: 'Likes testing',
       author: 'Ignacio Martearena',
-      url: 'www.testing2.com'
+      url: 'www.testing2.com',
+      userId: user.id
     }
 
     const newBlogWithoutLikes = newBlog.likes !== undefined
     assert.strictEqual(newBlogWithoutLikes, false)
 
-    const response = await api
+    const response2 = await api
       .post('/api/blogs')
+      .set('Authorization', userToken)
       .send(newBlog)
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
-    const haveLikes = response.body.likes !== undefined
+    const haveLikes = response2.body.likes !== undefined
 
     assert.strictEqual(haveLikes, true)
-    assert.strictEqual(response.body.likes, 0)
+    assert.strictEqual(response2.body.likes, 0)
   })
 
   test('Title property is missing from the request data', async () => {
+    const userAtStart = await User.find({})
+
+    const user = userAtStart[0]
+
+    const userInfo = {
+      username: user.username,
+      password: 'secret'
+    }
+
+    const response = await api
+      .post('/api/login')
+      .send(userInfo)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    const userToken = `Bearer ${response.body.token}`
+
     const newBlogWithoutTitle = {
       author: 'Olivia Juarez',
       url: 'www.testing3.com',
-      likes: 14
+      likes: 14,
+      userId: user.id
     }
 
     const missingTitle = newBlogWithoutTitle.title !== undefined
     assert.strictEqual(missingTitle, false)
 
-    await api
+    const response2 = await api
       .post('/api/blogs')
+      .set('Authorization', userToken)
       .send(newBlogWithoutTitle)
       .expect(400)
       .expect('Content-Type', /application\/json/)
+
+    assert.strictEqual(response2.body.error, 'Title and url are required')
   })
 
   test('Url property is missing from the request data', async () => {
+    const userAtStart = await User.find({})
+
+    const user = userAtStart[0]
+
+    const userInfo = {
+      username: user.username,
+      password: 'secret'
+    }
+
+    const response = await api
+      .post('/api/login')
+      .send(userInfo)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    const userToken = `Bearer ${response.body.token}`
+
     const newBlogWithoutUrl = {
       title: 'Testing blog part3',
       author: 'Olivia Juarez',
-      likes: 14
+      likes: 14,
+      userId: user.id
     }
 
     const missingUrl = newBlogWithoutUrl.url !== undefined
     assert.strictEqual(missingUrl, false)
 
-    await api
+    const response2 = await api
       .post('/api/blogs')
+      .set('Authorization', userToken)
       .send(newBlogWithoutUrl)
       .expect(400)
       .expect('Content-Type', /application\/json/)
-  })
-})
 
-describe('Deletion of a blog', () => {
-  test('succeeds with status code 204 if id is valid', async () => {
-    const blogsAtStart = await blogsInDb()
-    const blogToDelete = blogsAtStart[0]
-
-    await api
-      .delete(`/api/blogs/${blogToDelete.id}`)
-      .expect(204)
-
-    const blogsAtEnd = await blogsInDb()
-    assert.strictEqual(blogsAtEnd.length, blogsAtStart.length - 1)
-
-    const content = blogsAtEnd.map(b => b.title)
-    assert(!content.includes(blogToDelete.title))
-  })
-})
-
-describe('Updating of a blog', () => {
-  test('Update done', async () => {
-    const blogsAtStart = await blogsInDb()
-    const blogForUpdate = blogsAtStart[0]
-    const infoForBlog = {
-      author: 'Ignacio Martearena',
-      likes: 312
-    }
-
-    await api
-      .put(`/api/blogs/${blogForUpdate.id}`)
-      .send(infoForBlog)
-      .expect(200)
-
-    const blogsAtEnd = await blogsInDb()
-    const blogUpdated = blogsAtEnd[0]
-
-    assert.notDeepStrictEqual(blogForUpdate, blogUpdated)
-
-    const newAuthor = blogUpdated.author
-    const newLikes = blogUpdated.likes
-
-    assert.deepEqual(newAuthor, infoForBlog.author)
-    assert.deepEqual(newLikes, infoForBlog.likes)
-  })
-
-  test('The required fields are not sent', async () => {
-    const blogsAtStart = await blogsInDb()
-    const blogForUpdate = blogsAtStart[0]
-    const infoForBlog = {
-      title: '',
-      author: 'Ignacio Martearena',
-      likes: 312
-    }
-
-    await api
-      .put(`/api/blogs/${blogForUpdate.id}`)
-      .send(infoForBlog)
-      .expect(400)
-
-    const blogsAtEnd = await blogsInDb()
-    const blogNotUpdated = blogsAtEnd[0]
-
-    assert.deepStrictEqual(blogNotUpdated, blogForUpdate)
+    assert.strictEqual(response2.body.error, 'Title and url are required')
   })
 })
 

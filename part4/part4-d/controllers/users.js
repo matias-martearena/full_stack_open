@@ -8,6 +8,7 @@ usersRouter.get('/', async (request, response, next) => {
   const users = await User
     .find({})
     .populate('blogs', { title: 1, author: 1, url: 1, likes: 1 })
+
   return response.json(users)
 })
 
@@ -32,7 +33,9 @@ usersRouter.post('/', async (request, response, next) => {
 
   if (username === undefined) {
     return response.status(400).json({ error: 'You must enter a username' })
-  } else if (username.length < 3 || username.length > 100) {
+  }
+
+  if (username.length < 3 || username.length > 100) {
     return response.status(400).json({ error: 'The username must be at least 3 characters and a maximum of 100' })
   }
 

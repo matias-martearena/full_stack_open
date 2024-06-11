@@ -7,13 +7,14 @@ GET http://localhost:3001/api/blogs/6658caa96242ac8140ce
 ### Error when create a blog without title and url
 POST http://localhost:3001/api/blogs
 Content-Type: application/json
+Authorization: Bearer :token
 
 {
-  "title": "Im not authorizated",
-  "url": "www.notauthorization.com",
-  "author": "Matias Martearena",
-  "likes": 10,
-  "userId": "666860024321bb1545676d03"
+  "title": "Token test 2",
+  "author": "Agustin Castro",
+  "url": "www.authorization.com",
+  "likes": 1,
+  "userId": "6668a46ce72e20e17b5d1fcd"
 }
 
 ### Error the blog is not exist
