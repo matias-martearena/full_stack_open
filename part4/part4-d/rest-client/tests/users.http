@@ -1,0 +1,15 @@
+### Return all users
+GET http://localhost:3001/api/users
+
+### Return an user for id
+GET http://localhost:3001/api/users/:id
+
+### Create a new user
+POST http://localhost:3001/api/users
+Content-Type: application/json
+
+{
+  "username": "BlueRulo",
+  "name": "Agustin Castro",
+  "password": "secret-secret"
+}

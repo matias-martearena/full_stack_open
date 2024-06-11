@@ -1,0 +1,30 @@
+### Return all blogs
+GET http://localhost:3001/api/blogs
+
+### Return a blog for id
+GET http://localhost:3001/api/blogs/:id
+
+### POST: Create a blog
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IldoaXRlUnVsbyIsImlkIjoiNjY2ODYwMDI0MzIxYmIxNTQ1Njc2ZDAzIiwiaWF0IjoxNzE4MTE5MjY5LCJleHAiOjE3MTgxMjI4Njl9.-vrPP1a9CgG9QwXU7bSAEqwUq3XbXs0JCXbkePxYAlg
+
+{
+  "title": "Are you authorizated?",
+  "author": "User Root",
+  "url": "www.authorization.com",
+  "likes": 1,
+  "userId": "666860024321bb1545676d03"
+}
+
+### Delete a blog
+DELETE http://localhost:3001/api/blogs/:id
+
+### PUT: Update a blog
+PUT http://localhost:3001/api/blogs/:id
+Content-Type: application/json
+
+{
+  "author": "Agustin Castro",
+  "likes": 100
+}

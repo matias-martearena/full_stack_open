@@ -1,0 +1,41 @@
+### Return an error for id not found
+GET http://localhost:3001/api/blogs/6658caa96242ac8140ceb2bd
+
+### Return an error for bad format id
+GET http://localhost:3001/api/blogs/6658caa96242ac8140ce
+
+### Error when create a blog without title and url
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+
+{
+  "title": "Im not authorizated",
+  "url": "www.notauthorization.com",
+  "author": "Matias Martearena",
+  "likes": 10,
+  "userId": "666860024321bb1545676d03"
+}
+
+### Error the blog is not exist
+DELETE http://localhost:3001/api/blogs/6660fc801f96548785ea85b1
+
+### Bad format to an id blog
+DELETE http://localhost:3001/api/blogs/6660fc801f96548785ea85
+
+### Error blog not found
+PUT http://localhost:3001/api/blogs/6660fc7c1f96548785ea85b2
+Content-Type: application/json
+
+{
+  "author": "Agustin Castro",
+  "likes": 142
+}
+
+### Error bad format id
+PUT http://localhost:3001/api/blogs/6660fc7c1f96548785e
+Content-Type: application/json
+
+{
+  "author": "Agustin Castro",
+  "likes": 142
+}

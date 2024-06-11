@@ -4,8 +4,6 @@ import jwt from 'jsonwebtoken'
 import Blog from '../models/blog.js'
 import User from '../models/user.js'
 
-import { getTokenFrom } from '../utils/getTokenFrom.js'
-
 export const blogsRouter = express.Router()
 
 blogsRouter.get('/', async (request, response, next) => {
@@ -30,7 +28,7 @@ blogsRouter.get('/:id', async (request, response, next) => {
 blogsRouter.post('/', async (request, response, next) => {
   const { title, author, url, likes, userId } = request.body
 
-  const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET)
+  const decodedToken = jwt.verify(request.token, process.env.SECRET)
 
   if (!decodedToken.id) {
     return response

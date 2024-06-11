@@ -1,0 +1,11 @@
+### User not found
+GET http://localhost:3001/api/users/66678d37345264992860af73
+
+### Error when create an user
+POST http://localhost:3001/api/users
+Content-Type: application/json
+
+{
+  "username": "db",
+  "name": "Matias Martearena"
+}

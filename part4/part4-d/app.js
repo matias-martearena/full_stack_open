@@ -11,7 +11,8 @@ import {
   corsMiddleware,
   errorHandler,
   requestLogger,
-  unknownEndpoint
+  unknownEndpoint,
+  tokenExtractor
 } from './utils/middlewares.js'
 
 mongoose.set('strictQuery', false)
@@ -26,6 +27,7 @@ app.disable('x-powered-by')
 app.use(corsMiddleware())
 app.use(express.json())
 app.use(requestLogger)
+app.use(tokenExtractor)
 
 app.get('/', (request, response) => {
   response.send('<h1>Hello blogs</h1>')
