@@ -7,19 +7,19 @@ GET http://localhost:3001/api/blogs/:id
 ### POST: Create a blog
 POST http://localhost:3001/api/blogs
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkJsdWVSdWxvIiwiaWQiOiI2NjY4NjAxOTQzMjFiYjE1NDU2NzZkMDkiLCJpYXQiOjE3MTgxMzMzNzgsImV4cCI6MTcxODEzNjk3OH0.gLhRsZaiePkjBMqugGSaiwDQtaMsBOg2T6XmizH7WL4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFndUNhc3RybyIsImlkIjoiNjY2OGE0NmNlNzJlMjBlMTdiNWQxZmNkIiwiaWF0IjoxNzE4MTM0ODY2LCJleHAiOjE3MTgxMzg0NjZ9.GAbWISmjkPCVVYz8Y2S21XXQDmi94pmScLqC0DhJug4
 
 {
-  "title": "Are you authorizated?",
-  "author": "User Root",
+  "title": "Token test 2",
+  "author": "Agustin Castro",
   "url": "www.authorization.com",
   "likes": 1,
-  "userId": "666860194321bb1545676d09"
+  "userId": "6668a46ce72e20e17b5d1fcd"
 }
 
 ### Delete a blog
-DELETE http://localhost:3001/api/blogs/6668a39fcf81f1d80a7bf6a5
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkJsdWVSdWxvIiwiaWQiOiI2NjY4NjAxOTQzMjFiYjE1NDU2NzZkMDkiLCJpYXQiOjE3MTgxMzMzNzgsImV4cCI6MTcxODEzNjk3OH0.gLhRsZaiePkjBMqugGSaiwDQtaMsBOg2T6XmizH7WL4
+DELETE http://localhost:3001/api/blogs/6668ab9e5911b9575b1e0fdb
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFndUNhc3RybyIsImlkIjoiNjY2OGE0NmNlNzJlMjBlMTdiNWQxZmNkIiwiaWF0IjoxNzE4MTM0ODY2LCJleHAiOjE3MTgxMzg0NjZ9.GAbWISmjkPCVVYz8Y2S21XXQDmi94pmScLqC0DhJug4
 
 ### PUT: Update a blog
 PUT http://localhost:3001/api/blogs/:id

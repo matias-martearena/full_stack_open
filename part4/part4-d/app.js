@@ -12,7 +12,8 @@ import {
   errorHandler,
   requestLogger,
   unknownEndpoint,
-  tokenExtractor
+  tokenExtractor,
+  userExtractor
 } from './utils/middlewares.js'
 
 mongoose.set('strictQuery', false)
@@ -33,7 +34,7 @@ app.get('/', (request, response) => {
   response.send('<h1>Hello blogs</h1>')
 })
 
-app.use('/api/blogs', blogsRouter)
+app.use('/api/blogs', userExtractor, blogsRouter)
 app.use('/api/users', usersRouter)
 app.use('/api/login', loginRouter)
 

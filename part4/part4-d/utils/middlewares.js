@@ -1,4 +1,7 @@
 import cors from 'cors'
+import jwt from 'jsonwebtoken'
+
+import User from '../models/user.js'
 import { info } from './logger.js'
 
 const ACCEPTED_ORIGINS = [
@@ -57,6 +60,30 @@ export const tokenExtractor = (request, response, next) => {
     request.token = authorization.replace('Bearer ', '')
   } else {
     request.token = null
+  }
+
+  next()
+}
+
+export const userExtractor = async (request, response, next) => {
+  const authorization = request.get('authorization')
+
+  if (authorization && authorization.startsWith('Bearer ')) {
+    const token = authorization.replace('Bearer ', '')
+
+    const decodedToken = jwt.verify(token, process.env.SECRET)
+
+    if (!decodedToken.id) {
+      return response
+        .status(401)
+        .json({ error: 'token invalid' })
+    }
+
+    const user = await User.findById(decodedToken.id)
+
+    request.user = user
+  } else {
+    request.user = null
   }
 
   next()

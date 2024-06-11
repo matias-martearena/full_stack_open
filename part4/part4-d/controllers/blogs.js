@@ -1,5 +1,4 @@
 import express from 'express'
-import jwt from 'jsonwebtoken'
 
 import Blog from '../models/blog.js'
 import User from '../models/user.js'
@@ -28,22 +27,15 @@ blogsRouter.get('/:id', async (request, response, next) => {
 
 blogsRouter.post('/', async (request, response, next) => {
   const { title, author, url, likes, userId } = request.body
+  const { _id } = request.user
 
-  const decodedToken = jwt.verify(request.token, process.env.SECRET)
-
-  if (!decodedToken.id) {
-    return response
-      .status(401)
-      .json({ error: 'token invalid' })
-  }
-
-  if (decodedToken.id !== userId) {
+  if (_id.toString() !== userId) {
     return response
       .status(401)
       .json({ error: 'User ID and token user ID do not match' })
   }
 
-  const user = await User.findById(decodedToken.id)
+  const user = await User.findById(_id)
 
   if ((title || url) === undefined) {
     return response
@@ -69,19 +61,11 @@ blogsRouter.post('/', async (request, response, next) => {
 
 blogsRouter.delete('/:id', async (request, response, next) => {
   const { id } = request.params
+  const { _id } = request.user
 
-  const decodedToken = jwt.verify(request.token, process.env.SECRET)
-
-  if (!decodedToken.id) {
-    return response
-      .status(401)
-      .json({ error: 'token invalid' })
-  }
-
-  const user = await User.findById(decodedToken.id)
   const deletedBlog = await Blog.findById(id)
 
-  if (user._id.toString() !== deletedBlog.user.toString()) {
+  if (_id.toString() !== deletedBlog.user.toString()) {
     return response
       .status(401)
       .json({ error: 'The user is not enabled to do this operation' })
