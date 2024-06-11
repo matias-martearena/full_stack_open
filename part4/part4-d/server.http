@@ -14,10 +14,11 @@ POST http://localhost:3001/api/blogs
 Content-Type: application/json
 
 {
-  "title": "Test blog 4",
+  "title": "Test blog 6",
   "author": "Matias Martearena",
   "url": "www.testblog.com.ar",
-  "likes": 13
+  "likes": 141,
+  "userId": "666860194321bb1545676d09"
 }
 
 ### Delete a blog
@@ -86,8 +87,8 @@ POST http://localhost:3001/api/users
 Content-Type: application/json
 
 {
-  "username": "WhiteRulo",
-  "name": "Matias Martearena",
+  "username": "BlueRulo",
+  "name": "Agustin Castro",
   "password": "secret-secret"
 }
 

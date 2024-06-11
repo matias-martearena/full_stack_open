@@ -1,24 +1,32 @@
 import express from 'express'
 import Blog from '../models/blog.js'
+import User from '../models/user.js'
 
 export const blogsRouter = express.Router()
 
 blogsRouter.get('/', async (request, response, next) => {
-  const blogs = await Blog.find({})
+  const blogs = await Blog
+    .find({})
+    .populate('user', { username: 1, name: 1 })
   return response.json(blogs)
 })
 
 blogsRouter.get('/:id', async (request, response, next) => {
   const { id } = request.params
 
-  const blog = await Blog.findById(id)
+  const blog = await Blog
+    .findById(id)
+    .populate('user', { username: 1, name: 1 })
+
   return blog
     ? response.json(blog)
     : response.status(404).json({ error: 'Blog not found' })
 })
 
 blogsRouter.post('/', async (request, response, next) => {
-  const { title, author, url, likes } = request.body
+  const { title, author, url, likes, userId } = request.body
+
+  const user = await User.findById(userId)
 
   if (title === undefined) {
     return response.status(400).json({ error: 'Title is required' })
@@ -32,10 +40,15 @@ blogsRouter.post('/', async (request, response, next) => {
     title,
     author,
     url,
-    likes: likes ?? 0
+    likes: likes ?? 0,
+    user: user.id
   })
 
   const savedBlog = await blog.save()
+
+  user.blogs = user.blogs.concat(savedBlog._id)
+  await user.save()
+
   return response.status(201).json(savedBlog)
 })
 
