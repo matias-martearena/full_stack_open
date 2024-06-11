@@ -5,7 +5,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
-    minLength: 4,
+    minLength: 3,
     maxLength: 100
   },
   name: {
@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema({
   passwordHash: {
     type: String,
     required: true,
-    minLength: 10
+    minLength: 3
   }
 })
 

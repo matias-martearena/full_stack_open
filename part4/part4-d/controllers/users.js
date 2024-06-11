@@ -30,20 +30,18 @@ usersRouter.post('/', async (request, response, next) => {
 
   if (username === undefined) {
     return response.status(400).json({ error: 'You must enter a username' })
-  } else if (username.length < 4 || username.length > 100) {
-    return response.status(400).json({ error: 'The username must be at least 4 characters and a maximum of 100' })
+  } else if (username.length < 3 || username.length > 100) {
+    return response.status(400).json({ error: 'The username must be at least 3 characters and a maximum of 100' })
   }
 
-  if (name === undefined) {
-    return response.status(400).json({ error: 'You must enter a name' })
-  } else if (name.length < 5 || name.length > 100) {
+  if (name.length < 5 || name.length > 100) {
     return response.status(400).json({ error: 'The name must be at least 5 characters and a maximum of 100' })
   }
 
   if (password === undefined) {
     return response.status(400).json({ error: 'You must enter a password' })
-  } else if (password.length < 10 || password.length > 255) {
-    return response.status(400).json({ error: 'The password must be at least 10 characters and a maximum of 255' })
+  } else if (password.length < 3) {
+    return response.status(400).json({ error: 'The password must be at least 3 characters and a maximum of 255' })
   }
 
   const saltRounds = 10
