@@ -10,6 +10,7 @@ blogsRouter.get('/', async (request, response, next) => {
   const blogs = await Blog
     .find({})
     .populate('user', { username: 1, name: 1 })
+
   return response.json(blogs)
 })
 
@@ -37,17 +38,17 @@ blogsRouter.post('/', async (request, response, next) => {
   }
 
   if (decodedToken.id !== userId) {
-    return response.status(401).json({ error: 'User ID and token user ID do not match' })
+    return response
+      .status(401)
+      .json({ error: 'User ID and token user ID do not match' })
   }
 
   const user = await User.findById(decodedToken.id)
 
-  if (title === undefined) {
-    return response.status(400).json({ error: 'Title is required' })
-  }
-
-  if (url === undefined) {
-    return response.status(400).json({ error: 'Url is required' })
+  if ((title || url) === undefined) {
+    return response
+      .status(400)
+      .json({ error: 'Title and url are required' })
   }
 
   const blog = new Blog({
@@ -69,11 +70,28 @@ blogsRouter.post('/', async (request, response, next) => {
 blogsRouter.delete('/:id', async (request, response, next) => {
   const { id } = request.params
 
-  const deletedBlog = await Blog.findByIdAndDelete(id)
+  const decodedToken = jwt.verify(request.token, process.env.SECRET)
+
+  if (!decodedToken.id) {
+    return response
+      .status(401)
+      .json({ error: 'token invalid' })
+  }
+
+  const user = await User.findById(decodedToken.id)
+  const deletedBlog = await Blog.findById(id)
+
+  if (user._id.toString() !== deletedBlog.user.toString()) {
+    return response
+      .status(401)
+      .json({ error: 'The user is not enabled to do this operation' })
+  }
 
   if (!deletedBlog) {
     return response.status(404).json({ error: 'Blog not exist' })
   }
+
+  await Blog.deleteOne({ _id: deletedBlog._id })
 
   return response.status(204).end()
 })

@@ -9,7 +9,10 @@ POST http://localhost:3001/api/users
 Content-Type: application/json
 
 {
-  "username": "BlueRulo",
+  "username": "AguCastro",
   "name": "Agustin Castro",
   "password": "secret-secret"
 }
+
+### Delete an user
+DELETE http://localhost:3001/api/users/666860194321bb1545676d09

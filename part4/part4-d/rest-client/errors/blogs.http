@@ -22,6 +22,9 @@ DELETE http://localhost:3001/api/blogs/6660fc801f96548785ea85b1
 ### Bad format to an id blog
 DELETE http://localhost:3001/api/blogs/6660fc801f96548785ea85
 
+### Delete a blog without authorization
+DELETE http://localhost:3001/api/blogs/6668a39fcf81f1d80a7bf6a5
+
 ### Error blog not found
 PUT http://localhost:3001/api/blogs/6660fc7c1f96548785ea85b2
 Content-Type: application/json
