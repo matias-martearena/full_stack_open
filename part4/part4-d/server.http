@@ -12,17 +12,18 @@ GET http://localhost:3001/api/blogs/6658caa96242ac8140ceb2bc
 ### POST: Create a blog
 POST http://localhost:3001/api/blogs
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkJsdWVSdWxvIiwiaWQiOiI2NjY4NjAxOTQzMjFiYjE1NDU2NzZkMDkiLCJpYXQiOjE3MTgxMTc2ODYsImV4cCI6MTcxODEyMTI4Nn0.0xeSGaIRwjaB91bYYjOqdEPiCww5PE81HqPlGnH2W-w
 
 {
-  "title": "Test blog 6",
+  "title": "Authorization test",
   "author": "Matias Martearena",
   "url": "www.testblog.com.ar",
-  "likes": 141,
-  "userId": "666860194321bb1545676d09"
+  "likes": 14,
+  "userId": "6668600f4321bb1545676d06"
 }
 
 ### Delete a blog
-DELETE http://localhost:3001/api/blogs/66678ba334d3658ce8b772f5
+DELETE http://localhost:3001/api/blogs/666865c3341b289b051553f1
 
 ### PUT: Update a blog
 PUT http://localhost:3001/api/blogs/6660fc7c1f96548785ea85b1
@@ -105,4 +106,27 @@ Content-Type: application/json
   "username": "WhiteRulo",
   "name": "Matias Martearena",
   "password": "secret-secret"
+}
+
+### ------------------ Login operators ------------------
+
+### Generate a token
+POST http://localhost:3001/api/login
+Content-Type: application/json
+
+{
+  "username": "BlueRulo",
+  "password": "secret-secret"
+}
+
+### ------------------ Error login operators ------------------
+
+### Error when generate token
+
+POST http://localhost:3001/api/login
+Content-Type: application/json
+
+{
+  "username": "WhiteRulo",
+  "password": "supersecret"
 }
